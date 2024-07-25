@@ -1,4 +1,4 @@
-# Self-Driving Cars in F1 Tracks
+# Self-Driving Cars Around F1 Tracks Using AI
 
 A self-driving AI car simulation using NeuroEvolution of Augmenting Topologies (NEAT) algorithm. 
 
