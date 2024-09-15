@@ -18,7 +18,7 @@ pip3 install pygame
 An example usage is:
 
 ```bash
-pyton3 play.py silverstone
+python3 play.py silverstone
 ```
 
 There are 8 F1 tracks:
