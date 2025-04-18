@@ -21,6 +21,8 @@ An example usage is:
 python3 play.py silverstone
 ```
 
+You can change the configurations in config.txt to see if you can make create better models!
+
 There are 8 F1 tracks:
 
 1. Bahrain
