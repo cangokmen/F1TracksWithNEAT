@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+
+# Generated training artifacts
+champions/
+checkpoints/neat-*
