@@ -4,3 +4,7 @@ __pycache__/
 # Generated training artifacts
 champions/
 checkpoints/neat-*
+
+# Benchmark venv and outputs
+.venv/
+results/
