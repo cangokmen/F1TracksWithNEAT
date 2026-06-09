@@ -2,7 +2,12 @@
 
 A self-driving AI car simulation using NeuroEvolution of Augmenting Topologies (NEAT) algorithm. 
 
-![alt text](images/example.png)
+<p align="center">
+  <img src="images/readme/runs/bahrain-run.jpg" alt="Drivers learning on Bahrain" width="49%">
+  <img src="images/readme/runs/shanghai-run.jpg" alt="Drivers learning on Shanghai" width="49%">
+  <img src="images/readme/runs/spa-run.jpg" alt="Drivers learning on Spa" width="49%">
+  <img src="images/readme/runs/zandvoort-run.jpg" alt="Drivers learning on Zandvoort" width="49%">
+</p>
 
 ## Installation 
 
@@ -101,6 +106,34 @@ cost very different numbers of steps. Results land in `results/<track>/`:
 > identical across all four techniques, so the comparison stays fair. Author
 > gates (see above) for a lap-aware benchmark.
 
+### Benchmark results
+
+A reference run on **Silverstone** — 300k env-steps per technique, one seed,
+distance reward — gives a sense of how the paradigms stack up on this task:
+
+| Technique | Best fitness | Iterations at budget | Wall time |
+|---|---:|---:|---:|
+| **NEAT** (growing topology) | **1679.7** | 141 generations | ~123 s |
+| **GA** (fixed MLP) | 1413.8 | 72 generations | ~106 s |
+| **DQN** (gradient RL) | 438.0 | 23,227 episodes | ~385 s |
+| **ES** (fixed MLP) | 18.5 | 1,409 generations | ~78 s |
+
+**Takeaway:** at this budget the evolutionary searches lead, and NEAT's
+*growing* topology edges out the fixed-MLP GA — so on this environment, growing
+structure does help. DQN is still climbing (and is slowest in wall-clock), while
+OpenAI-ES is the least sample-efficient here: its single global perturbation step
+barely moves off the start. No technique completed a full lap in 300k steps under
+the distance reward — author gates for a lap-aware comparison.
+
+The charts below are written to `results/<track>/` by every run (`results/` is
+git-ignored, so these are committed copies):
+
+<p align="center">
+  <img src="images/readme/benchmarks/fitness_vs_steps.png" alt="Fitness vs. env-steps — sample efficiency" width="32%">
+  <img src="images/readme/benchmarks/fitness_vs_walltime.png" alt="Fitness vs. wall time — training speed" width="32%">
+  <img src="images/readme/benchmarks/final_performance.png" alt="Final performance per technique" width="32%">
+</p>
+
 ### Watching any technique drive (`watch.py`)
 
 `benchmark.py` is headless (it only writes charts). To actually *see* a technique
@@ -129,6 +162,50 @@ Keys while watching: **SPACE** pause/resume · **F** toggle fast (uncapped, skip
 drawing) · **ESC** or closing the window quits. Useful flags: `--gens N`
 (NEAT/GA/ES length), `--steps N` (DQN length), `--episodes N` (replay count),
 `--max-ticks N` (ticks before a reset), `--fps N`, `--scale PX` (window width).
+
+## Command-line options
+
+Every command takes a required `track` argument (one of the 8 below). The full
+option set for each entry point:
+
+### `play.py` — original NEAT trainer
+
+| Option | Default | Description |
+|---|---|---|
+| `track` | *(required)* | track to drive |
+| `--fast` | off | headless, uncapped frame rate (fast training, no window) |
+| `--generations N` | 1000 | max generations to train |
+| `--replay` | off | load the saved champion (`champions/<track>.pkl`) and drive it |
+| `--edit-checkpoints` | off | open the interactive gate editor for this track |
+
+### `benchmark.py` — headless NEAT vs GA vs ES vs DQN
+
+| Option | Default | Description |
+|---|---|---|
+| `track` | *(required)* | track to benchmark on |
+| `--algos NEAT GA ES DQN` | all four | techniques to run (space-separated subset) |
+| `--steps N` | 300000 | env-step budget per technique per seed |
+| `--seeds N` | 1 | independent runs per technique |
+| `--quick` | off | tiny-budget smoke test (20k steps) |
+| `--out DIR` | `results` | output directory root |
+
+### `watch.py` — visual trainer / champion replay
+
+| Option | Default | Description |
+|---|---|---|
+| `track` | *(required)* | track to drive |
+| `--algo {neat,ga,es,dqn}` | *(required)* | which technique to watch |
+| `--replay` | off | load the saved champion for this (track, algo) and just watch it drive |
+| `--episodes N` | 0 | replay episodes before exiting (0 = loop until you close the window) |
+| `--gens N` | 30 | generations to train (NEAT/GA/ES) |
+| `--steps N` | 80000 | env-step budget to train (DQN) |
+| `--max-ticks N` | 2400 | max ticks per generation/episode before reset |
+| `--fps N` | 60 | frame-rate cap (press **F** to uncap) |
+| `--scale PX` | 1280 | max window width in pixels |
+| `--seed N` | 0 | RNG seed |
+
+In-window keys (`watch.py`): **SPACE** pause/resume · **F** toggle fast
+(uncapped, skips drawing) · **ESC** / close window to quit.
 
 There are 8 F1 tracks:
 
