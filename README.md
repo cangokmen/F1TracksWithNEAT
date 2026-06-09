@@ -44,10 +44,12 @@ passing them in sequence and completing laps. Author them interactively:
 python3 play.py silverstone --edit-checkpoints
 ```
 
-In the editor: **click** to drop a gate, **`[` / `]`** to shrink/grow its
-radius, **`u`** to undo, **`s`** to save to `checkpoints/<track>.json`, **esc**
-to quit. If a gate file exists it is used automatically during training and
-replay; otherwise training falls back to the distance reward.
+In the editor: **click** to drop a gate, **`-` / `+`** (or **down** / **up**) to
+shrink/grow its radius, **`u`** to undo, **`s`** to save to
+`checkpoints/<track>.json`, **esc** to quit. The default radius (20) spans the
+~33px road; a gate should cover the road curb-to-curb so a car passes it from any
+line. If a gate file exists it is used automatically during training and replay;
+otherwise training falls back to the distance reward.
 
 ### Sensors
 

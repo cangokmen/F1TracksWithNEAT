@@ -371,14 +371,14 @@ def replay(config):
 
 
 def edit_checkpoints():
-    """Interactive gate editor: click to drop gates, [ / ] to resize, u to undo, s to save."""
+    """Interactive gate editor: click to drop gates, -/+ to resize, u to undo, s to save."""
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
-    pygame.display.set_caption("Gate editor: click=add  [ ]=radius  u=undo  s=save  esc=quit")
+    pygame.display.set_caption("Gate editor: click=add  -/+ (or down/up)=radius  u=undo  s=save  esc=quit")
     game_map = pygame.image.load(map_image_path(ARGS.track)).convert()
     font = pygame.font.SysFont("Chicago", 28)
 
     gates = load_gates(ARGS.track)
-    radius = 40
+    radius = 20  # ~half the ~33px road width -> the gate spans the road curb-to-curb
 
     running = True
     while running:
@@ -393,9 +393,9 @@ def edit_checkpoints():
                     running = False
                 elif event.key == pygame.K_u and gates:
                     gates.pop()
-                elif event.key == pygame.K_LEFTBRACKET:
-                    radius = max(10, radius - 5)
-                elif event.key == pygame.K_RIGHTBRACKET:
+                elif event.key in (pygame.K_MINUS, pygame.K_KP_MINUS, pygame.K_DOWN):
+                    radius = max(5, radius - 5)
+                elif event.key in (pygame.K_EQUALS, pygame.K_PLUS, pygame.K_KP_PLUS, pygame.K_UP):
                     radius = min(200, radius + 5)
                 elif event.key == pygame.K_s:
                     os.makedirs("checkpoints", exist_ok=True)
