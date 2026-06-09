@@ -110,8 +110,10 @@ class Renderer:
         for car in cars:
             if car.is_alive():
                 car.draw(self.canvas)
+        header = "Track: %s" % self.track.title()
+        self.canvas.blit(self.font.render(header, True, (0, 0, 0)), (20, 20))
         for i, line in enumerate(hud_lines):
-            self.canvas.blit(self.font.render(line, True, (0, 0, 0)), (20, 20 + i * 34))
+            self.canvas.blit(self.font.render(line, True, (0, 0, 0)), (20, 54 + i * 34))
 
         pygame.transform.scale(self.canvas, self.win_size, self.screen)
         pygame.display.flip()
